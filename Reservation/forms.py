@@ -5,3 +5,4 @@ class ReservationForm(forms.ModelForm):
     class Meta:
         model = Reserva
         fields = ['mesa', 'cliente', 'fecha', 'hora', 'duracion', 'comentario']
+        
