@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from .models import Reserva, Mesa  # Modelo de reserva Y TABLAS
-from .forms import ReservationForm  # Formulario para crear reservas
+from .models import Reserva, Mesa, Cliente  # Modelo de reserva Y TABLAS
+from .forms import ReservationForm, ClienteForm # Formulario para crear reservas
 from django.contrib import messages #para mostrar un mensaje de exito o error
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
@@ -9,6 +9,10 @@ from django.contrib.auth.decorators import login_required
 def reservacion_view(request):
    reservaciones = Reserva.objects.all().order_by("fecha","hora")  # Obtiene todas las reservas
    return render(request, 'reservation_list.html', {'reservaciones': reservaciones})
+
+def reser(request):
+    reservaciones = Reserva.objects.all().order_by("fecha","hora")   
+    return render(request, 're_list.html', {'reservaciones': reservaciones})
 
 # Vista para crear una nueva reserva
 def create_reservation(request):
@@ -32,6 +36,29 @@ def create_reservation(request):
         
         return render(request, 'create_reservation.html', {'form': form})
         
+def create(request):
+    form = ReservationForm()
+    return render(request, 'create.html', {'form': form})
+
+def crate_user(request):
+    if request.method == 'POST':
+        form = ClienteForm(request.POST)
+        if form.is_valid():
+            # Verificar disponibilidad
+            email = form.cleaned_data['email']
+            telefono = form.cleaned_data['telefono']
+            nombre = form.cleaned_data['nombre']
+
+            existing_user = Cliente.objects.filter(email=email, telefono=telefono, nombre=nombre).exists()
+            if existing_user:
+                messages.error(request, "Usuario Existente.")
+            else:
+                form.save()  # Guarda la nueva reserva
+                messages.success(request, "Usuario creado con éxito.")
+                return redirect("reservation_list")  # Redirige a la lista de reservas
+    else:   
+        form = ClienteForm()
+        return render(request, 'create_user.html', {'form': form})
 
 def login_form(request):
     if request.method == "POST":

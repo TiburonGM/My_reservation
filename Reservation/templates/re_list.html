@@ -1,0 +1,49 @@
+{% extends "index.html" %}
+{% block content %} 
+<div class="container mt-4">    
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Lista de Reservaciones</h4>
+            <div class="table-responsive">
+                <table
+                    class="table table-striped-columns table-hover table-bordered table-primary align-middle"
+                >
+                    <thead class="table-dark">
+                        <caption>
+                            Lista de reservaciones activas
+                        </caption>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Email</th>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                            <th>Mesa</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+                        {% for reservation in reservaciones %}
+                        <tr class="table-primary">
+                            <td>{{ reservation.cliente.nombre }}</td>
+                            <td>{{ reservation.cliente.email }}</td>
+                            <td>{{ reservation.fecha }}</td>
+                            <td>{{ reservation.hora }}</td>
+                            <td>{{ reservation.mesa.numero }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="mt-3">
+                <a href="{% url 'reservation_create' %}" class="btn btn-primary">
+                    Crear Nueva Reservación
+                </a>
+            </div>
+            <div class="text-end">
+                <a href="{% url 'login' %}" class="btn btn-primary">
+                    Acceso Administrador
+                </a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

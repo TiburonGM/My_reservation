@@ -1,0 +1,22 @@
+{% extends "index.html" %}
+{% block content %}
+<div class="container  d-flex align-items-center justify-content-center vh-100">
+    <div class="card shadow p-4" style="width: 100%; max-width: 400px;">
+        <h2 class="text-center mb-4">Crear Ususario</h1>
+        <!-- Mostrar mensajes de éxito o error -->
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} mt-3">
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        <!-- Formulario para crear una nueva reservación -->
+        <form method="post" >
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary w-100">Crear</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
