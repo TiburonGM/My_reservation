@@ -30,14 +30,30 @@ def create_reservation(request):
             else:
                 form.save()  # Guarda la nueva reserva
                 messages.success(request, "Reservación creada con éxito.")
-                return redirect("reservation_list")  # Redirige a la lista de reservas
+                return redirect("reservation_list2")  # Redirige a la lista de reservas
     else:
         form = ReservationForm()
         
         return render(request, 'create_reservation.html', {'form': form})
         
 def create(request):
-    form = ReservationForm()
+    if request.method == 'POST':
+        form = ReservationForm(request.POST)
+        if form.is_valid():
+            # Verificar disponibilidad
+            date = form.cleaned_data['fecha']
+            time = form.cleaned_data['hora']
+            table = form.cleaned_data['mesa']
+
+            existing_reservation = Reserva.objects.filter(fecha=date, hora=time, mesa=table).exists()
+            if existing_reservation:
+                messages.error(request, "La mesa ya está reservada en ese horario.")
+            else:
+                form.save()  # Guarda la nueva reserva
+                messages.success(request, "Reservación creada con éxito.")
+                return redirect("reservation_list2")  # Redirige a la lista de reservas
+    else:
+        form = ReservationForm()
     return render(request, 'create.html', {'form': form})
 
 def crate_user(request):
@@ -55,7 +71,7 @@ def crate_user(request):
             else:
                 form.save()  # Guarda la nueva reserva
                 messages.success(request, "Usuario creado con éxito.")
-                return redirect("reservation_list")  # Redirige a la lista de reservas
+                return redirect("reservation_list2")  # Redirige a la lista de reservas
     else:   
         form = ClienteForm()
         return render(request, 'create_user.html', {'form': form})

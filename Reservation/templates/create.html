@@ -16,11 +16,9 @@
     <form method="post" class="card p-4 shadow">
         {% csrf_token %}
         {{ form.as_p }}            
+        
         <div class="text-end">
-            <a href="{% url 'reservation_list' %}" class="btn btn-secondary mt-3">Regresar a Lista</a>
-        </div>
-        <div class="text-end">
-            <button type="submit" class="btn btn-success">Guardar</button>
+            <button type="submit" class="btn btn-primary w-100">Guardar reservacion</button>
         </div>
     </form>
 </div>
